@@ -4,6 +4,7 @@ import 'package:material_ui/material_ui.dart';
 import 'data.dart';
 import 'halaman_detail.dart';
 import 'halaman_katalog.dart';
+import 'halaman_kategori.dart';
 import 'halaman_tentang.dart';
 
 void main() => runApp(const KatalogApp());
@@ -28,6 +29,12 @@ final _router = GoRouter(
                       produk: id == null ? null : cariProduk(id),
                     );
                   },
+                ),
+                GoRoute(
+                  path: 'kategori/:nama', // URL lengkap: /kategori/Kue
+                  builder: (context, state) => HalamanKategori(
+                    nama: state.pathParameters['nama'] ?? '',
+                  ),
                 ),
               ],
             ),

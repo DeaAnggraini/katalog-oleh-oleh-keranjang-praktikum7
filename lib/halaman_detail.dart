@@ -29,7 +29,10 @@ class HalamanDetail extends StatelessWidget {
       aspectRatio: 4 / 3,
       child: Container(
         color: p.warna.withValues(alpha: 0.15),
-        child: Icon(p.ikon, size: 120, color: p.warna),
+        child: Hero(
+          tag: 'produk-${p.id}', // harus sama dengan tag di KartuProduk
+          child: Icon(p.ikon, size: 120, color: p.warna),
+        ),
       ),
     );
     final info = Padding(
@@ -39,7 +42,11 @@ class HalamanDetail extends StatelessWidget {
         children: [
           Text(p.nama, style: teks.headlineSmall),
           const SizedBox(height: 8),
-          Chip(label: Text(p.kategori)),
+          ActionChip(
+            label: Text(p.kategori),
+            onPressed: () =>
+                context.go('/kategori/${Uri.encodeComponent(p.kategori)}'),
+          ),
           const SizedBox(height: 8),
           Text(
             p.harga.rupiah,

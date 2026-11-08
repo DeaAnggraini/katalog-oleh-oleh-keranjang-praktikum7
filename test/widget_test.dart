@@ -10,7 +10,7 @@ void main() {
     await tester.tap(find.text('Kopi Sidikalang'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Minuman'), findsOneWidget); // Chip di halaman detail
+    expect(find.byType(ActionChip), findsOneWidget); // chip kategori di detail
     expect(find.byType(BackButton), findsOneWidget);
   });
 }
