@@ -1,13 +1,21 @@
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:provider/provider.dart';
 
 import 'data.dart';
 import 'halaman_detail.dart';
 import 'halaman_katalog.dart';
 import 'halaman_kategori.dart';
+import 'halaman_keranjang.dart';
 import 'halaman_tentang.dart';
+import 'keranjang_model.dart';
 
-void main() => runApp(const KatalogApp());
+void main() => runApp(
+      ChangeNotifierProvider(
+        create: (_) => KeranjangModel(),
+        child: const KatalogApp(),
+      ),
+    );
 
 final _router = GoRouter(
   initialLocation: '/',
@@ -48,6 +56,15 @@ final _router = GoRouter(
             ),
           ],
         ),
+
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/keranjang',
+              builder: (context, state) => const HalamanKeranjang(),
+            ),
+          ],
+        ),
       ],
     ),
   ],
@@ -81,6 +98,13 @@ class KerangkaNavigasi extends StatelessWidget {
   Widget build(BuildContext context) {
     final lebar = MediaQuery.sizeOf(context).width;
 
+    final jumlah = context.select((KeranjangModel k) => k.jumlahItem);
+    final ikonKeranjang = Badge.count(
+      count: jumlah,
+      isLabelVisible: jumlah > 0,
+      child: const Icon(Icons.shopping_cart_outlined),
+    );
+
     // Layar lebar (tablet/desktop): navigasi di samping
     if (lebar >= 840) {
       return Scaffold(
@@ -90,16 +114,21 @@ class KerangkaNavigasi extends StatelessWidget {
               selectedIndex: shell.currentIndex,
               onDestinationSelected: _pilih,
               labelType: NavigationRailLabelType.all,
-              destinations: const [
-                NavigationRailDestination(
+
+              destinations: [
+                const NavigationRailDestination(
                   icon: Icon(Icons.storefront_outlined),
                   selectedIcon: Icon(Icons.storefront),
                   label: Text('Katalog'),
                 ),
-                NavigationRailDestination(
+                const NavigationRailDestination(
                   icon: Icon(Icons.info_outline),
                   selectedIcon: Icon(Icons.info),
                   label: Text('Tentang'),
+                ),
+                NavigationRailDestination(
+                  icon: ikonKeranjang,
+                  label: const Text('Keranjang'),
                 ),
               ],
             ),
@@ -116,17 +145,18 @@ class KerangkaNavigasi extends StatelessWidget {
       bottomNavigationBar: NavigationBar(
         selectedIndex: shell.currentIndex,
         onDestinationSelected: _pilih,
-        destinations: const [
-          NavigationDestination(
+        destinations: [
+          const NavigationDestination(
             icon: Icon(Icons.storefront_outlined),
             selectedIcon: Icon(Icons.storefront),
             label: 'Katalog',
           ),
-          NavigationDestination(
+          const NavigationDestination(
             icon: Icon(Icons.info_outline),
             selectedIcon: Icon(Icons.info),
             label: 'Tentang',
           ),
+          NavigationDestination(icon: ikonKeranjang, label: 'Keranjang'),
         ],
       ),
     );

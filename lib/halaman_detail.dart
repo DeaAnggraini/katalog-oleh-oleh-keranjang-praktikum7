@@ -1,7 +1,9 @@
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:provider/provider.dart';
 
 import 'data.dart';
+import 'keranjang_model.dart';
 
 class HalamanDetail extends StatelessWidget {
   const HalamanDetail({super.key, required this.produk});
@@ -22,6 +24,9 @@ class HalamanDetail extends StatelessWidget {
         ),
       );
     }
+
+    // Harus diletakkan setelah pengecekan null, karena butuh p.id
+    final diKeranjang = context.select((KeranjangModel k) => k.jumlahDari(p.id));
 
     final skema = Theme.of(context).colorScheme;
     final teks = Theme.of(context).textTheme;
@@ -54,6 +59,17 @@ class HalamanDetail extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(p.deskripsi, style: teks.bodyLarge),
+
+          const SizedBox(height: 24),
+          FilledButton.icon(
+            onPressed: () => context.read<KeranjangModel>().tambah(p),
+            icon: const Icon(Icons.add_shopping_cart),
+            label: Text(
+              diKeranjang == 0
+                  ? 'Tambah ke keranjang'
+                  : 'Tambah lagi ($diKeranjang di keranjang)',
+            ),
+          ),
         ],
       ),
     );
