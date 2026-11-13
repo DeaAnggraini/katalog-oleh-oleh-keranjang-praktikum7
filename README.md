@@ -1,17 +1,11 @@
-# katalog_oleh_oleh
+## Perbandingan Provider vs Cubit
 
-A new Flutter project.
+| Pertanyaan | Provider | Cubit |
+|---|---|---|
+| Berapa berkas/baris yang berubah? | 9 berkas (7 tanpa file otomatis), +221 −8 | 8 berkas (7 tanpa file otomatis), +241 −15 |
+| Di mana logika bisnis berada? | `KeranjangModel` (lib/keranjang_model.dart) | `KeranjangCubit` (lib/keranjang_cubit.dart) |
+| Bagaimana UI mengetahui perubahan? | Model memanggil `notifyListeners()`; UI memakai `watch`/`select` | Cubit memanggil `emit()` dengan state baru; UI memakai `BlocBuilder`/`select` |
+| Mana yang lebih mudah diuji? Mengapa? | (isi pendapat Anda) | (isi pendapat Anda) |
+| Mana yang dipilih untuk proyek akhir? Mengapa? | (isi pendapat Anda) | (isi pendapat Anda) |
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Catatan: angka diambil dari `git diff --stat main <branch>`.
