@@ -1,3 +1,4 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -5,9 +6,16 @@ import 'data.dart';
 import 'halaman_detail.dart';
 import 'halaman_katalog.dart';
 import 'halaman_kategori.dart';
+import 'halaman_keranjang.dart';
 import 'halaman_tentang.dart';
+import 'keranjang_cubit.dart';
 
-void main() => runApp(const KatalogApp());
+void main() => runApp(
+      BlocProvider(
+        create: (_) => KeranjangCubit(),
+        child: const KatalogApp(),
+      ),
+    );
 
 final _router = GoRouter(
   initialLocation: '/',
@@ -22,7 +30,7 @@ final _router = GoRouter(
               builder: (context, state) => const HalamanKatalog(),
               routes: [
                 GoRoute(
-                  path: 'produk/:id', // URL lengkap: /produk/3
+                  path: 'produk/:id',
                   builder: (context, state) {
                     final id = int.tryParse(state.pathParameters['id'] ?? '');
                     return HalamanDetail(
@@ -31,7 +39,7 @@ final _router = GoRouter(
                   },
                 ),
                 GoRoute(
-                  path: 'kategori/:nama', // URL lengkap: /kategori/Kue
+                  path: 'kategori/:nama',
                   builder: (context, state) => HalamanKategori(
                     nama: state.pathParameters['nama'] ?? '',
                   ),
@@ -45,6 +53,15 @@ final _router = GoRouter(
             GoRoute(
               path: '/tentang',
               builder: (context, state) => const HalamanTentang(),
+            ),
+          ],
+        ),
+        // BARU: cabang ketiga
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/keranjang',
+              builder: (context, state) => const HalamanKeranjang(),
             ),
           ],
         ),
@@ -81,7 +98,14 @@ class KerangkaNavigasi extends StatelessWidget {
   Widget build(BuildContext context) {
     final lebar = MediaQuery.sizeOf(context).width;
 
-    // Layar lebar (tablet/desktop): navigasi di samping
+    // BARU: versi Cubit
+    final jumlah = context.select((KeranjangCubit c) => c.state.jumlahItem);
+    final ikonKeranjang = Badge.count(
+      count: jumlah,
+      isLabelVisible: jumlah > 0,
+      child: const Icon(Icons.shopping_cart_outlined),
+    );
+
     if (lebar >= 840) {
       return Scaffold(
         body: Row(
@@ -90,16 +114,20 @@ class KerangkaNavigasi extends StatelessWidget {
               selectedIndex: shell.currentIndex,
               onDestinationSelected: _pilih,
               labelType: NavigationRailLabelType.all,
-              destinations: const [
-                NavigationRailDestination(
+              destinations: [
+                const NavigationRailDestination(
                   icon: Icon(Icons.storefront_outlined),
                   selectedIcon: Icon(Icons.storefront),
                   label: Text('Katalog'),
                 ),
-                NavigationRailDestination(
+                const NavigationRailDestination(
                   icon: Icon(Icons.info_outline),
                   selectedIcon: Icon(Icons.info),
                   label: Text('Tentang'),
+                ),
+                NavigationRailDestination(
+                  icon: ikonKeranjang,
+                  label: const Text('Keranjang'),
                 ),
               ],
             ),
@@ -110,23 +138,23 @@ class KerangkaNavigasi extends StatelessWidget {
       );
     }
 
-    // Layar sempit (ponsel): navigasi di bawah
     return Scaffold(
       body: shell,
       bottomNavigationBar: NavigationBar(
         selectedIndex: shell.currentIndex,
         onDestinationSelected: _pilih,
-        destinations: const [
-          NavigationDestination(
+        destinations: [
+          const NavigationDestination(
             icon: Icon(Icons.storefront_outlined),
             selectedIcon: Icon(Icons.storefront),
             label: 'Katalog',
           ),
-          NavigationDestination(
+          const NavigationDestination(
             icon: Icon(Icons.info_outline),
             selectedIcon: Icon(Icons.info),
             label: 'Tentang',
           ),
+          NavigationDestination(icon: ikonKeranjang, label: 'Keranjang'),
         ],
       ),
     );
