@@ -62,6 +62,12 @@ flutter test
 Catatan: angka diambil dari `git diff --stat main <branch>`. "File otomatis" adalah `pubspec.lock` dan `devtools_options.yaml`.
 
 ## Tangkapan Layar
-`screenshots/`![alt text](<Halaman detail dengan tombol tambah ke keranjang.jpeg>)
-`screenshots/`![alt text](<Tab Keranjang (daftar, total).jpeg>)
+
+Halaman detail dengan tombol tambah ke keranjang:
+
+![Halaman detail](screenshots/detail.jpeg)
+
+Tab Keranjang (daftar dan total):
+
+![Tab Keranjang](screenshots/keranjang.jpeg)
  
