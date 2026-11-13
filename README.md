@@ -5,8 +5,8 @@ Fitur keranjang belanja ditambahkan ke aplikasi katalog Pertemuan 6, dibangun du
  
 ## Identitas
  
-- Nama: (isi nama Anda)
-- NIM: (isi NIM Anda)
+- Nama: Dea Anggraini
+- NIM: 4243250051
 - Mata Kuliah: Pemrograman Mobile (3KOM40215), Semester 5
 - Program Studi Ilmu Komputer, FMIPA, Universitas Negeri Medan
 ## Branch
